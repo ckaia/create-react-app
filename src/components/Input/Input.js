@@ -10,13 +10,12 @@ const Input = ({defaultText, width, type}) => {
   );
 }
 
-
 Input.propTypes = {
   /**
    * The default input text
    * @type {string}
    */
-  defaultText: PropTypes.string,
+  defaultText: PropTypes.string.isRequired,
   /**
    * The input width
    * @type {number}
@@ -31,15 +30,14 @@ Input.propTypes = {
     if(!(propName in props)) {
       return new Error (`Missing ${propName}`)
     }
-    if(!(props[propName] === "text" || props[propName] === "password")) {
-      return new Error(`Value of property ${propName} is not allowed: ${props[propName]}. Use text or password`)
+    if(!(props[propName] === 'text' || props[propName] === 'password')) {
+      return new Error(`Incorrect value of property "${propName}": ${props[propName]}.\nAllowed values are "text" or "password".`)
     }
   }
 };
 
 Input.defaultProps = {
-  defaultText: 'Type your task in here',
-  width: '300px'
+  width: '40%'
 };
 
 export default Input;
