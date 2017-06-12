@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Input from './Input';
-import Button from './Button';
-import List from './List';
+import Input from '.components/Input/Input';
+import Button from '.components/Button/Button';
+import List from '.components/List/List';
 
 let getUserInput;
 
