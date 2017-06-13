@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Input from '.components/Input/Input';
-import Button from '.components/Button/Button';
-import List from '.components/List/List';
+import Input from './components/Input/Input';
+import Button from './components/Button/Button';
+import List from './components/List/List';
 
 let getUserInput;
 
@@ -17,10 +17,9 @@ class App extends Component {
 	handleClick(e) {
 		// Get user input
 		getUserInput = document.querySelector('input').value;
-		this.state.userList.push(getUserInput);
 
-		// Update state
-		this.setState({userList: this.state.userList});
+		// Set state
+		this.setState({userList: this.state.userList.concat(getUserInput)});
 
 		// Reset input
 		document.getElementById("my-Form").reset();
@@ -29,6 +28,10 @@ class App extends Component {
   render () {
 		// TO-DO: When the input type is password then it should not be allowed
 		// the addition of a task to the list?
+		//
+		// TO-DO: When the user types the input and accidently presses "Enter"
+		// the page is refreshed which results to loose the list of tasks entered
+		// till that momment. This behanvior should be prevented.
     return (
       <div>
         Add your task below<br />
