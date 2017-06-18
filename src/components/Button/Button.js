@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Button = ({clickData, color, onClick, text, type, width}) => {
   const styles = {
@@ -30,17 +31,8 @@ Button.propTypes = {
   text: PropTypes.string.isRequired,
   /**
    * The button type (submit, button are the only allowed values)
-   * @param  {[type]} props     Properties
-   * @param  {[type]} propsName Property name
    */
-  type(props, propName) {
-    if(!(propName in props)) {
-      return new Error (`Missing ${propName}`)
-    }
-    if(!(props[propName] === "submit" || props[propName] === "button")) {
-      return new Error(`Incorrect value of property "${propName}": ${props[propName]}.\nAllowed values are "submit" or "button".`)
-    }
-  },
+  type: PropTypes.oneOf(['submit', 'button']).isRequired,
   /**
    * The button width
    */
