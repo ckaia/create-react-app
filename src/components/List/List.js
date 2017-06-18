@@ -13,7 +13,6 @@ const List = ({items}) => {
 List.propTypes = {
 	/**
 	 * Items of the list
-	 * @type {Array}
 	 */
   items: PropTypes.arrayOf(PropTypes.string)
 };
