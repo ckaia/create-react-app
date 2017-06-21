@@ -8,7 +8,7 @@ const Button = ({clickData, color, onClick, text, type, width}) => {
   };
 
   return (
-    <button type={type} style={styles} onClick={clickData}>{text}</button>
+    <button type={type} style={styles} onClick={onClick(clickData)}>{text}</button>
   );
 };
 
@@ -16,7 +16,7 @@ Button.propTypes = {
   /**
    * The data to be passed as param onClick function call
    */
-  clickData: PropTypes.any.isRequired,
+  clickData: PropTypes.any,
   /**
    * The button color
    */
@@ -24,7 +24,7 @@ Button.propTypes = {
   /**
    * The function to be called on button click
    */
-  onClick: PropTypes.func,
+  onClick: PropTypes.func.isRequired,
   /**
    * The button text
    */
