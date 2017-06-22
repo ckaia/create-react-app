@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import Input from './components/Input/Input';
-import Button from './components/Button/Button';
-import List from './components/List/List';
+import Input from './components/Input/Input.jsx';
+import Button from './components/Button/Button.jsx';
+import List from './components/List/List.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class App extends Component {
   addTask() {
     this.task = document.querySelector('input').value;
     this.setState({taskList: this.state.taskList.concat(this.task)});
-    
+
     document.getElementById('input-task').reset();
   }
 
