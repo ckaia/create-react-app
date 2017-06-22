@@ -13,12 +13,24 @@ class App extends Component {
   addTask() {
     this.task = document.querySelector('input').value;
     this.setState({taskList: this.state.taskList.concat(this.task)});
-
+    
     document.getElementById('input-task').reset();
   }
 
-  handleClick = () => e => {
-    this.addTask();
+  removeTask(item) {
+    const newTaskList = this.state.taskList;
+    if (newTaskList.indexOf(item) > -1) {
+      newTaskList.splice(newTaskList.indexOf(item), 1);
+      this.setState({taskList: newTaskList})
+    }
+  }
+
+  handleClick = item => e => {
+    if (e.target.textContent === 'Add') {
+      this.addTask();
+    } else if (e.target.textContent === 'Remove') {
+      this.removeTask(item);
+    }
   }
 
   handleKeyPress = e => {
@@ -31,15 +43,21 @@ class App extends Component {
   render () {
     return (
       <div>
-        Add your task below<br />
+        Add your task below
+        <br />
         <form id='input-task'>
           <Input type='text' defaultText='Type your task in here'/>
-        </form><br />
+        </form>
+        <br />
 
-        Click to add your task<br />
-        <Button onClick={this.handleClick} text='Add' type='submit' /><br /><br />
+        Click to add your task
+        <br />
+        <Button onClick={this.handleClick} text='Add' type='submit' color='royalblue' />
+        <br />
+        <br />
 
-				List of tasks added <List items={this.state.taskList} />
+				Tasks
+        <List items={this.state.taskList} onClick={this.handleClick} />
       </div>
     )
   }

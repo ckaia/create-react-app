@@ -40,8 +40,9 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  color: 'purple',
-  width: '50px'
+  color: 'black',
+  width: '50px',
+  clickData: null
 };
 
 export default Button;
