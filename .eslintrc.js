@@ -1,34 +1,20 @@
 module.exports = {
-  'extends': [
-    'plugin:react/recommended'
+  extends: [
+    'airbnb'
   ],
-  'rules': {
-    'arrow-parens': [2, 'as-needed'],
-    'comma-dangle': ['error', 'never'],
-    'indent': [2, 2],
-    'linebreak-style': 0,
-    'max-len': [2, 120],
-    'no-multiple-empty-lines': ['error', {'max': 1, 'maxBOF': 1}],
-    'no-console': 2,
-    'no-unused-vars': ['error'],
-    'no-whitespace-before-property': ['error'],
-    'no-debugger': 'error',
-    'no-undef': 'error',
-    'react/jsx-indent': [2, 2],
-    'require-jsdoc': 2,
+  rules: {
+    'arrow-parens': [2, 'as-needed', {'requireForBlockBody': false}],
+    'comma-dangle': ['off'],
+    'import/prefer-default-export': 'off',
+    'max-len': ['error', 120],
+    'no-inline-comments': ['error'],
+    'no-loop-func': 'off',
+    'no-mixed-operators': 'off',
+    'no-plusplus': 'off',
+    'no-underscore-dangle': 'off',
+    'object-curly-spacing': ['error', 'never']
   },
-  'parserOptions': {
-    'ecmaVersion': 8,
-    'sourceType': 'module',
-    'ecmaFeatures': {
-        'jsx': true,
-        'modules': true
-    }
-  },
-  'env': {
-    'browser': true
-  },
-  'plugins': [
-    'react'
-  ]
+  env: {
+    browser: true
+  }
 }
