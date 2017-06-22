@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 const Button = ({clickData, color, onClick, text, type, width}) => {
   const styles = {
-    width: width,
-    color: color
+    width,
+    color
   };
 
   return (

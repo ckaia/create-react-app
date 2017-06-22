@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const Input = ({defaultText, width, type}) => {
-  const styles = {width}; // Shorthand
+  const styles = {width};
 
   return (
     <input placeholder={defaultText} type={type} style={styles} />
   );
-}
+};
 
 Input.propTypes = {
   /**
