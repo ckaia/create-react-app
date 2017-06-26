@@ -12,7 +12,8 @@ module.exports = {
     'no-mixed-operators': 'off',
     'no-plusplus': 'off',
     'no-underscore-dangle': 'off',
-    'object-curly-spacing': ['error', 'never']
+    'object-curly-spacing': ['error', 'never'],
+    'react/jsx-filename-extension': [1, {'extensions': ['.js', '.jsx']}]
   },
   env: {
     browser: true
