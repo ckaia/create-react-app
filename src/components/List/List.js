@@ -15,7 +15,7 @@ const List = props => {
 
   return (
     <ul>{listItems}</ul>
-  )
+  );
 };
 
 List.propTypes = {
