@@ -6,8 +6,11 @@ import List from './components/List/List';
 class App extends Component {
   constructor(props) {
     super(props);
+    
+    // state variables
     this.state = {taskList: []};
-    this.task = '';
+    
+    // rest context variables
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
@@ -21,9 +24,9 @@ class App extends Component {
   }
 
   addTask() {
-    this.task = document.querySelector('input').value;
-    this.setState({taskList: this.state.taskList.concat(this.task)});
-
+    const task = document.querySelector('input').value;
+    this.setState({taskList: this.state.taskList.concat(task)});
+    
     document.getElementById('input-task').reset();
   }
 
