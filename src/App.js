@@ -42,12 +42,15 @@ class App extends Component {
     }
   }
 
-  handleClick = item => e => {
-    if (e.target.textContent === 'Add') {
-      this.addTask();
-    } else if (e.target.textContent === 'Remove') {
-      this.removeTask(item);
-    }
+  handleClick(item) {
+    return e => {
+      const textContext = e.target.textContent;
+      if (textContext === 'Add') {
+        this.addTask();
+      } else if (textContext === 'Remove') {
+        this.removeTask(item);
+      }
+    };
   }
 
   render() {
