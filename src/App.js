@@ -6,10 +6,10 @@ import List from './components/List/List';
 class App extends Component {
   constructor(props) {
     super(props);
-    
+
     // state variables
     this.state = {taskList: []};
-    
+
     // rest context variables
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -26,7 +26,7 @@ class App extends Component {
   addTask() {
     const task = document.querySelector('input').value;
     this.setState({taskList: this.state.taskList.concat(task)});
-    
+
     document.getElementById('input-task').reset();
   }
 
@@ -57,6 +57,16 @@ class App extends Component {
   }
 
   render() {
+    const listItems = this.state.taskList.map(
+      (item, index) => (
+        <li key={`${item}-${index}`}>
+          <Button onClick={this.handleClick} text="Remove" type="submit" width="65px" clickData={item} />
+          <span>{' '}</span>
+          <span>{item}</span>
+        </li>
+      )
+    );
+
     return (
       <div>
         Add your task below
@@ -73,7 +83,7 @@ class App extends Component {
         <br />
 
         Tasks
-        <List items={this.state.taskList} onClick={this.handleClick} />
+        <List items={listItems} />
       </div>
     );
   }
