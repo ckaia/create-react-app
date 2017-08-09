@@ -59,7 +59,7 @@ class App extends Component {
    */
   addTask() {
     const task = document.querySelector('input').value;
-    this.setState({taskList: this.state.taskList.concat(task)});
+    this.setState({value: task, taskList: this.state.taskList.concat(task)});
 
     document.getElementById('input-task').reset();
   }
@@ -175,6 +175,8 @@ class App extends Component {
         );
       }
     );
+
+    this.editAction = '';
 
     return (
       <div>
