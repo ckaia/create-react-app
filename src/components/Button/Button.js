@@ -9,7 +9,7 @@ const Button = ({clickData, color, onClick, text, type, width}) => {
   };
 
   return (
-    <button type={type} style={styles} onClick={onClick(clickData)}>{text}</button>
+    <button type={type} style={styles} onClick={() => onClick(clickData)}>{text}</button>
   );
 };
 
