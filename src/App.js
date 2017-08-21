@@ -9,7 +9,7 @@ import List from './components/List/List';
 
 /**
  * A container component that is used to wrap a To-do list
- * where the user can interact by adding, removing or editing tasks.
+ * where the user can interact by adding, removing or editing tasks
  */
 class App extends Component {
   /**
@@ -21,11 +21,13 @@ class App extends Component {
 
     this.state = {
       /**
-       * List of tasks
+       * List of the added tasks.
        */
       taskList: [],
-      editingTaskIndex: -1,
-      value: ''
+      /**
+       * Index of a task that its value will be updated
+       */
+      editingTaskIndex: -1
     };
 
     // function bindings
@@ -35,12 +37,15 @@ class App extends Component {
     this.enableEditMode = this.enableEditMode.bind(this);
     this.disableEditMode = this.disableEditMode.bind(this);
     this.removeTask = this.removeTask.bind(this);
+
+    // variables
+    this.editingTask = '';
   }
 
   /**
-   * Add task to task list. The task is retrieved from the input text.
-   * The input value is reseted after the state update in order the user to add new task again.
-   * @param  {string} task user task
+   * Adding task in task list
+   * Task is retrieved from the input text
+   * Input is reseted after task submition, in order to add new task
    */
   addTaskOnButtonClick() {
     const task = document.getElementById('add-task').value;
@@ -50,8 +55,9 @@ class App extends Component {
   }
 
   /**
-   * Add task to task list. The task is retrieved by the event that triggers the addition.
-   * The input value is reseted after the state update in order the user to add new task again.
+   * Adding task in task list
+   * Task is retrieved by the event that triggers the addition
+   * Input is reseted after task submition, in order to add new task
    * @param  {object} e keyboard event
    */
   addTaskOnEnter(e) {
@@ -64,23 +70,23 @@ class App extends Component {
   }
 
   /**
-   * Edit task
-   * @param  {object} e Event
+   * Editing task.
+   * @param  {object} e keyboard type event
    */
   editTask(e) {
-    this.setState({value: e.target.value});
+    this.editingTask = e.target.value;
   }
 
   /**
-   * Allow user to edit the task this a specific index
-   * @param  {object} e Event
+   * Enable task editing
+   * @param  {object} e click event
    */
   enableEditMode(e) {
-    this.setState({editingTaskIndex: Number(e.target.dataset.index), value: e.target.textContent});
+    this.setState({editingTaskIndex: Number(e.target.dataset.index)});
   }
 
   /**
-   * Updates task list. Removes the task that is selected.
+   * Delete selected task from task list
    * @param  {string} task task to be removed
    */
   removeTask(task) {
@@ -111,7 +117,6 @@ class App extends Component {
     let taskElem;
 
     const listItems = this.state.taskList.map((item, index) => {
-      // Task is presented
       if (this.state.editingTaskIndex !== index) {
         taskElem = (
           <textbox onClick={this.enableEditMode} data-index={index}>{item}</textbox>
@@ -119,7 +124,7 @@ class App extends Component {
       } else {
         // Edit mode
         taskElem = (
-          <input type="text" value={this.state.value} onChange={this.editTask} onKeyPress={this.disableEditMode} />
+          <input type="text" value={item} onChange={this.editTask} onKeyPress={this.disableEditMode} />
         );
       }
 
