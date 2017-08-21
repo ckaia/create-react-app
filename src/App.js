@@ -23,19 +23,18 @@ class App extends Component {
       /**
        * List of tasks
        */
-      taskList: []
+      taskList: [],
+      editingTaskIndex: -1,
+      value: ''
     };
 
     // function bindings
     this.addTaskOnButtonClick = this.addTaskOnButtonClick.bind(this);
-    this.removeTaskOnButtonClick = this.removeTaskOnButtonClick.bind(this);
     this.addTaskOnEnter = this.addTaskOnEnter.bind(this);
     this.editTask = this.editTask.bind(this);
-    this.allowEditingTask = this.allowEditingTask.bind(this);
-    this.submitEditingTask = this.submitEditingTask.bind(this);
-
-    // variables
-    this.editingTaskIndex = -1;
+    this.enableEditMode = this.enableEditMode.bind(this);
+    this.disableEditMode = this.disableEditMode.bind(this);
+    this.removeTask = this.removeTask.bind(this);
   }
 
   /**
@@ -65,34 +64,26 @@ class App extends Component {
   }
 
   /**
-   * Allow user to edit the task this a specific index
-   * @param  {number} taskIndex Index that points to the task to be edited
-   */
-  allowEditingTask(taskIndex) {
-    this.editingTaskIndex = taskIndex;
-    this.setState({taskList: this.state.taskList});
-  }
-
-  /**
    * Edit task
    * @param  {object} e Event
    */
   editTask(e) {
-    const editingTaskList = _.clone(this.state.taskList);
-    editingTaskList[this.editingTaskIndex] = e.target.value;
+    this.setState({value: e.target.value});
+  }
 
-    this.setState({taskList: editingTaskList});
-    // this.setState(prevState => {
-    //   prevState.taskList[this.editingTaskIndex] = e.target.value;
-    //   return {taskList: prevState.taskList};
-    // });
+  /**
+   * Allow user to edit the task this a specific index
+   * @param  {object} e Event
+   */
+  enableEditMode(e) {
+    this.setState({editingTaskIndex: Number(e.target.dataset.index), value: e.target.textContent});
   }
 
   /**
    * Updates task list. Removes the task that is selected.
    * @param  {string} task task to be removed
    */
-  removeTaskOnButtonClick(task) {
+  removeTask(task) {
     this.setState(prevState => {
       prevState.taskList.splice(prevState.taskList.indexOf(task), 1);
       return {taskList: prevState.taskList};
@@ -103,10 +94,12 @@ class App extends Component {
    * Submit task
    * @param  {object} e Event
    */
-  submitEditingTask(e) {
+  disableEditMode(e) {
     if (e.key === 'Enter') {
-      this.editingTaskIndex = -1;
-      this.setState({taskList: this.state.taskList});
+      const editingTaskList = _.clone(this.state.taskList);
+      editingTaskList[this.state.editingTaskIndex] = e.target.value;
+
+      this.setState({editingTaskIndex: -1, taskList: editingTaskList});
     }
   }
 
@@ -119,16 +112,20 @@ class App extends Component {
 
     const listItems = this.state.taskList.map((item, index) => {
       // Task is presented
-      if (this.editingTaskIndex !== index) {
-        taskElem = <textbox onClick={() => this.allowEditingTask(index)}>{item}</textbox>;
+      if (this.state.editingTaskIndex !== index) {
+        taskElem = (
+          <textbox onClick={this.enableEditMode} data-index={index}>{item}</textbox>
+        );
       } else {
-        // Task is editable
-        taskElem = <input type="text" value={item} onChange={this.editTask} onKeyPress={this.submitEditingTask} />;
+        // Edit mode
+        taskElem = (
+          <input type="text" value={this.state.value} onChange={this.editTask} onKeyPress={this.disableEditMode} />
+        );
       }
 
       return (
         <li key={`${item}-${index}`}>
-          <Button onClick={this.removeTaskOnButtonClick} text="Remove" type="submit" width="65px" clickData={item} />
+          <Button onClick={this.removeTask} text="Remove" type="submit" width="65px" clickData={item} />
           <span>{' '}</span>
           {taskElem}
         </li>
