@@ -18,7 +18,7 @@ Input.propTypes = {
   /**
    * The input identifier
    */
-  id: PropTypes.sting,
+  id: PropTypes.string,
   /**
    * The function to be called on key press
    */
