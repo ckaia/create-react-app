@@ -35,8 +35,8 @@ class App extends Component {
    * To handle click when button for add or removed are clicked
    * @param  {string} task user task
    */
-  addTaskOnButtonClick() {
-    const task = document.getElementById('add-task').value;
+  addTaskOnButtonClick(task) {
+    //const task = document.getElementById('add-task').value;
     this.setState({taskList: this.state.taskList.concat([task])});
 
     document.getElementById('input-task').reset();
@@ -97,7 +97,7 @@ class App extends Component {
             text="Add"
             type="submit"
             color="royalblue"
-            clickData={document.getElementById('add-task') && document.getElementById('add-task').value}
+            clickData={document.getElementById('add-task') ? document.getElementById('add-task').value : ''}
           />
         </div>
         <div>
