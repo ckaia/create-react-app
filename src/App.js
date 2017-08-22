@@ -37,6 +37,7 @@ class App extends Component {
     this.enableEditMode = this.enableEditMode.bind(this);
     this.disableEditMode = this.disableEditMode.bind(this);
     this.removeTask = this.removeTask.bind(this);
+    this.skipEditMode = this.skipEditMode.bind(this);
 
     // variables
     this.editingTask = '';
@@ -45,19 +46,19 @@ class App extends Component {
   /**
    * Adding task in task list
    * Task is retrieved from the input text
-   * Input is reseted after task submition, in order to add new task
+   * Input is reseted after task submition, so manual task deletion is not necessary
    */
   addTaskOnButtonClick() {
     const task = document.getElementById('add-task').value;
     this.setState({taskList: this.state.taskList.concat([task])});
 
-    document.getElementById('input-task').reset();
+    document.getElementById('task-form').reset();
   }
 
   /**
    * Adding task in task list
-   * Task is retrieved by the event that triggers the addition
-   * Input is reseted after task submition, in order to add new task
+   * Task is retrieved from the ENTER event
+   * Input is reseted after task submition, so manual task deletion is not necessary
    * @param  {object} e keyboard event
    */
   addTaskOnEnter(e) {
@@ -65,7 +66,7 @@ class App extends Component {
       e.preventDefault();
       this.setState({taskList: this.state.taskList.concat(e.target.value)});
 
-      document.getElementById('input-task').reset();
+      document.getElementById('task-form').reset();
     }
   }
 
@@ -86,6 +87,19 @@ class App extends Component {
   }
 
   /**
+   * Submit task
+   * @param  {object} e Event
+   */
+  disableEditMode(e) {
+    if (e.key === 'Enter') {
+      const editingTaskList = _.clone(this.state.taskList);
+      editingTaskList[this.state.editingTaskIndex] = e.target.value;
+
+      this.setState({editingTaskIndex: -1, taskList: editingTaskList});
+    }
+  }
+
+  /**
    * Delete selected task from task list
    * @param  {string} task task to be removed
    */
@@ -100,13 +114,8 @@ class App extends Component {
    * Submit task
    * @param  {object} e Event
    */
-  disableEditMode(e) {
-    if (e.key === 'Enter') {
-      const editingTaskList = _.clone(this.state.taskList);
-      editingTaskList[this.state.editingTaskIndex] = e.target.value;
-
-      this.setState({editingTaskIndex: -1, taskList: editingTaskList});
-    }
+  skipEditMode() {
+    this.setState({editingTaskIndex: -1});
   }
 
   /**
@@ -124,7 +133,13 @@ class App extends Component {
       } else {
         // Edit mode
         taskElem = (
-          <input type="text" value={item} onChange={this.editTask} onKeyPress={this.disableEditMode} />
+          <input
+            type="text"
+            value={item}
+            onChange={this.editTask}
+            onKeyPress={this.disableEditMode}
+            onBlur={this.skipEditMode}
+          />
         );
       }
 
@@ -141,7 +156,7 @@ class App extends Component {
       <div>
         <h2>Task list</h2>
         <div>
-          <form id="input-task">
+          <form id="task-form">
             <Input type="text" defaultText="Task..." onKeyPress={this.addTaskOnEnter} id="add-task" />
           </form>
           <Button
