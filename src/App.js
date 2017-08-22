@@ -101,12 +101,14 @@ class App extends Component {
    * @param  {object} e Event
    */
   disableEditMode(e) {
-    if (e.key === 'Enter') {
-      const editingTaskList = _.clone(this.state.taskList);
-      editingTaskList[this.state.editingTaskIndex] = e.target.value;
-
-      this.setState({editingTaskIndex: -1, taskList: editingTaskList});
-    }
+    _.debounce(() => {
+      if (e.key === 'Enter') {
+        const editingTaskList = _.clone(this.state.taskList);
+        editingTaskList[this.state.editingTaskIndex] = e.target.value;
+  
+        this.setState({editingTaskIndex: -1, taskList: editingTaskList});
+      }
+    }, 250)();
   }
 
   /**
