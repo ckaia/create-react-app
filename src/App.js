@@ -90,13 +90,15 @@ class App extends Component {
    * Submit task
    * @param  {object} e Event
    */
-  disableEditMode(e) {
-    if (e.key === 'Enter') {
-      const editingTaskList = _.clone(this.state.taskList);
-      editingTaskList[this.state.editingTaskIndex] = e.target.value;
+   disableEditMode(e) {
+     _.debounce(() => {
+       if (e.key === 'Enter') {
+         const editingTaskList = _.clone(this.state.taskList);
+         editingTaskList[this.state.editingTaskIndex] = e.target.value;
 
-      this.setState({editingTaskIndex: -1, taskList: editingTaskList});
-    }
+         this.setState({editingTaskIndex: -1, taskList: editingTaskList});
+       }
+     }, 250)();
   }
 
   /**
