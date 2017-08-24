@@ -41,7 +41,6 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  color: 'black',
   width: '50px',
   clickData: null
 };

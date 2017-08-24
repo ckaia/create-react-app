@@ -2,8 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// style
+import style from '../../style/style.css';
+
 const List = ({items}) => (
-  <ul>{items}</ul>
+  <ul id={style.taskList}>{items}</ul>
 );
 
 List.propTypes = {

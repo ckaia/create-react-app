@@ -7,6 +7,9 @@ import Button from './components/Button/Button';
 import Input from './components/Input/Input';
 import List from './components/List/List';
 
+// style
+import style from './style/style.css';
+
 /**
  * A container component that is used to wrap a To-do list
  * where the user can interact by adding, removing or editing tasks
@@ -90,15 +93,15 @@ class App extends Component {
    * Submit task
    * @param  {object} e Event
    */
-   disableEditMode(e) {
-     _.debounce(() => {
-       if (e.key === 'Enter') {
-         const editingTaskList = _.clone(this.state.taskList);
-         editingTaskList[this.state.editingTaskIndex] = e.target.value;
+  disableEditMode(e) {
+    _.debounce(() => {
+      if (e.key === 'Enter') {
+        const editingTaskList = _.clone(this.state.taskList);
+        editingTaskList[this.state.editingTaskIndex] = e.target.value;
 
-         this.setState({editingTaskIndex: -1, taskList: editingTaskList});
-       }
-     }, 250)();
+        this.setState({editingTaskIndex: -1, taskList: editingTaskList});
+      }
+    }, 250)();
   }
 
   /**
@@ -146,10 +149,9 @@ class App extends Component {
       }
 
       return (
-        <li key={`${item}-${index}`}>
-          <Button onClick={this.removeTask} text="Remove" type="submit" width="65px" clickData={item} />
-          <span>{' '}</span>
+        <li id={style.taskItem} key={`${item}-${index}`}>
           {taskElem}
+          <Button onClick={this.removeTask} text="Remove" type="submit" width="65px" clickData={item} />
         </li>
       );
     });
