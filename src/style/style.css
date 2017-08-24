@@ -10,9 +10,8 @@ li {
   justify-content: flex-end;
   align-items: center;
   position: relative;
-
-  border-top: 2px solid;
-  border-bottom: 2px solid;
+  border-top: 2px solid rgb(214,213,213);
+  border-bottom: 2px solid rgb(214,213,213);
   margin-top: -2px;
   width: 350px;
   left: 40px;

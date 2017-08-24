@@ -131,12 +131,16 @@ class App extends Component {
     const listItems = this.state.taskList.map((item, index) => {
       if (this.state.editingTaskIndex !== index) {
         taskElem = (
-          <TaskText onClick={this.enableEditMode} data-index={index}>{item}</TaskText>
+          <TaskText
+            onClick={this.enableEditMode}
+            data-index={index}
+            value={item}
+          />
         );
       } else {
         // Edit mode
         taskElem = (
-          <input
+          <TaskText
             type="text"
             value={item}
             onChange={this.editTask}
@@ -200,10 +204,14 @@ const TaskItem = styled.li`
   background-color: rgb(47,41,41);
 `;
 
-const TaskText = styled.textbox`
+const TaskText = styled.input`
+  border: 0;
   position: absolute;
-  left: 60px;
+  left: 30px;
   color: rgb(255, 255, 255);
+  background-color: rgb(47,41,41);
+  word-wrap: break-word;
+  word-break: break-all;
 `;
 
 export default App;
