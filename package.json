@@ -6,7 +6,8 @@
     "lodash": "^4.17.4",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
-    "react-dom": "^15.5.4"
+    "react-dom": "^15.5.4",
+    "styled-components": "^2.1.2"
   },
   "devDependencies": {
     "eslint": "^3.19.0",

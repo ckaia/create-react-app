@@ -1,14 +1,12 @@
 // packages
 import React, {Component} from 'react';
+import styled from 'styled-components';
 import _ from 'lodash';
 
 // components
 import Button from './components/Button/Button';
 import Input from './components/Input/Input';
 import List from './components/List/List';
-
-// style
-import style from './style/style.css';
 
 /**
  * A container component that is used to wrap a To-do list
@@ -133,7 +131,7 @@ class App extends Component {
     const listItems = this.state.taskList.map((item, index) => {
       if (this.state.editingTaskIndex !== index) {
         taskElem = (
-          <textbox onClick={this.enableEditMode} data-index={index}>{item}</textbox>
+          <TaskText onClick={this.enableEditMode} data-index={index}>{item}</TaskText>
         );
       } else {
         // Edit mode
@@ -149,10 +147,19 @@ class App extends Component {
       }
 
       return (
-        <li id={style.taskItem} key={`${item}-${index}`}>
+        <TaskItem key={`${item}-${index}`}>
           {taskElem}
-          <Button onClick={this.removeTask} text="Remove" type="submit" width="65px" clickData={item} />
-        </li>
+          <Button
+            backgroundColor="rgb(32,28,28)"
+            borderRadius="5"
+            clickData={item}
+            color="rgb(214,213,213)"
+            onClick={this.removeTask}
+            text="Remove"
+            type="submit"
+            width="65px"
+          />
+        </TaskItem>
       );
     });
 
@@ -178,5 +185,25 @@ class App extends Component {
     );
   }
 }
+
+const TaskItem = styled.li`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  border-top: 2px solid rgb(214,213,213);
+  border-bottom: 2px solid rgb(214,213,213);
+  margin-top: -2px;
+  width: 350px;
+  left: 40px;
+  background-color: rgb(47,41,41);
+`;
+
+const TaskText = styled.textbox`
+  position: absolute;
+  left: 60px;
+  color: rgb(255, 255, 255);
+`;
 
 export default App;

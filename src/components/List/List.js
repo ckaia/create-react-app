@@ -1,13 +1,17 @@
 // packages
 import React from 'react';
 import PropTypes from 'prop-types';
-
-// style
-import style from '../../style/style.css';
+import styled from 'styled-components';
 
 const List = ({items}) => (
-  <ul id={style.taskList}>{items}</ul>
+  <TaskList>{items}</TaskList>
 );
+
+const TaskList = styled.ul`
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+`;
 
 List.propTypes = {
   /**
