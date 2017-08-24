@@ -29,7 +29,7 @@ Button.propTypes = {
   /**
    * Rounded corners
    */
-  borderRadius: PropTypes.number,
+  borderRadius: PropTypes.string,
   /**
    * The data to be passed as param onClick function call
    */
@@ -58,7 +58,7 @@ Button.propTypes = {
 
 Button.defaultProps = {
   backgroundColor: null,
-  borderRadius: 0,
+  borderRadius: null,
   clickData: null,
   width: '50'
 };
