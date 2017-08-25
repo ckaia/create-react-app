@@ -1,5 +1,6 @@
 // packages
 import React, {Component} from 'react';
+import styled from 'styled-components';
 import _ from 'lodash';
 
 // components
@@ -90,15 +91,15 @@ class App extends Component {
    * Submit task
    * @param  {object} e Event
    */
-   disableEditMode(e) {
-     _.debounce(() => {
-       if (e.key === 'Enter') {
-         const editingTaskList = _.clone(this.state.taskList);
-         editingTaskList[this.state.editingTaskIndex] = e.target.value;
+  disableEditMode(e) {
+    _.debounce(() => {
+      if (e.key === 'Enter') {
+        const editingTaskList = _.clone(this.state.taskList);
+        editingTaskList[this.state.editingTaskIndex] = e.target.value;
 
-         this.setState({editingTaskIndex: -1, taskList: editingTaskList});
-       }
-     }, 250)();
+        this.setState({editingTaskIndex: -1, taskList: editingTaskList});
+      }
+    }, 250)();
   }
 
   /**
@@ -130,12 +131,16 @@ class App extends Component {
     const listItems = this.state.taskList.map((item, index) => {
       if (this.state.editingTaskIndex !== index) {
         taskElem = (
-          <textbox onClick={this.enableEditMode} data-index={index}>{item}</textbox>
+          <TaskText
+            onClick={this.enableEditMode}
+            data-index={index}
+            value={item}
+          />
         );
       } else {
         // Edit mode
         taskElem = (
-          <input
+          <TaskText
             type="text"
             value={item}
             onChange={this.editTask}
@@ -146,11 +151,19 @@ class App extends Component {
       }
 
       return (
-        <li key={`${item}-${index}`}>
-          <Button onClick={this.removeTask} text="Remove" type="submit" width="65px" clickData={item} />
-          <span>{' '}</span>
+        <TaskItem key={`${item}-${index}`}>
           {taskElem}
-        </li>
+          <Button
+            backgroundColor="rgb(32,28,28)"
+            borderRadius="5"
+            clickData={item}
+            color="rgb(214,213,213)"
+            onClick={this.removeTask}
+            text="Remove"
+            type="submit"
+            width="65px"
+          />
+        </TaskItem>
       );
     });
 
@@ -176,5 +189,29 @@ class App extends Component {
     );
   }
 }
+
+const TaskItem = styled.li`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  position: relative;
+  border-top: 2px solid rgb(214,213,213);
+  border-bottom: 2px solid rgb(214,213,213);
+  margin-top: -2px;
+  width: 350px;
+  left: 40px;
+  background-color: rgb(47,41,41);
+`;
+
+const TaskText = styled.input`
+  border: 0;
+  position: absolute;
+  left: 30px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(47,41,41);
+  word-wrap: break-word;
+  word-break: break-all;
+`;
 
 export default App;
