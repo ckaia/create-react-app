@@ -18,17 +18,17 @@ class App extends Component {
 
     this.state = {
       /**
-       * Todo tasks
+       * Contains all the tasks that user adds in todo list
        */
       taskList: [],
       /**
-       * Index of the task that is about to be updated
+       * Index of the editing task
        */
       editingTaskIndex: -1
     };
 
     // function bindings
-    this.addTaskOnButtonClick = this.addTaskOnButtonClick.bind(this);
+    this.addTaskOnClick = this.addTaskOnClick.bind(this);
     this.addTaskOnEnter = this.addTaskOnEnter.bind(this);
     this.editTask = this.editTask.bind(this);
     this.enableEditMode = this.enableEditMode.bind(this);
@@ -41,30 +41,39 @@ class App extends Component {
   }
 
   /**
-   * Adding task in task list
-   * Task is retrieved from the input text
-   * Input is reseted after task submition, so manual task deletion is not necessary
+   * Adding task in todo list on event. When add button is clicked the task is added to task list.
+   * @param  {object} e click event
    */
-  addTaskOnButtonClick() {
+  addTaskOnClick() {
     const task = document.getElementById('add-task').value;
-    this.setState({taskList: this.state.taskList.concat([task])});
 
-    document.getElementById('task-form').reset();
+    this.addTask(task);
   }
 
   /**
-   * Adding task in task list
-   * Task is retrieved from the ENTER event
-   * Input is reseted after task submition, so manual task deletion is not necessary
+   * Adding task in todo list on event. When "enter" event is triggered the task is added to task list.
    * @param  {object} e keyboard event
    */
   addTaskOnEnter(e) {
-    if (e.key === 'Enter') {
+    if (e && e.key === 'Enter') {
       e.preventDefault();
-      this.setState({taskList: this.state.taskList.concat(e.target.value)});
+      const task = e.target.value;
 
-      document.getElementById('task-form').reset();
+      this.addTask(task);
     }
+  }
+
+  /**
+   * Update state with new task in task list. Input is reseted after task submition, so manual task deletion by user,
+   * is not necessary.
+   * @param {string} task The task to be added in the list
+   */
+  addTask(task) {
+    this.setState(prevState => ({
+      taskList: [...prevState.taskList, task]
+    }));
+
+    document.getElementById('task-form').reset();
   }
 
   /**
@@ -100,11 +109,11 @@ class App extends Component {
 
   /**
    * Delete selected task from task list
-   * @param  {string} task task to be removed
+   * @param  {string} index index of the task to be removed
    */
-  removeTask(task) {
+  removeTask(index) {
     this.setState(prevState => {
-      prevState.taskList.splice(prevState.taskList.indexOf(task), 1);
+      prevState.taskList.splice(index, 1);
       return {taskList: prevState.taskList};
     });
   }
@@ -153,10 +162,9 @@ class App extends Component {
           <Button
             clickData={item}
             color='rgb(101, 143, 204)'
-            onClick={this.removeTask}
+            onClick={() => this.removeTask(index)}
             text='remove'
             type='submit'
-            width='65px'
           />
         </TaskItem>
       );
@@ -166,23 +174,21 @@ class App extends Component {
       <Container>
         <Header>todo</Header>
         <Body>
-          <AddWrapper>
-            <Add id='task-form'>
-              <Input
-                type='text'
-                defaultText='Type what you should do'
-                onKeyPress={this.addTaskOnEnter}
-                id='add-task'
-                width='300px'
-              />
-            </Add>
-            <Button
-              onClick={this.addTaskOnButtonClick}
-              text='add'
-              type='submit'
-              color='rgb(101, 143, 204)'
+          <Add id='task-form'>
+            <Input
+              type='text'
+              defaultText='Type what you should do'
+              onKeyPress={this.addTaskOnEnter}
+              id='add-task'
+              width='100%'
             />
-          </AddWrapper>
+          </Add>
+          <Button
+            onClick={this.addTaskOnClick}
+            text='add'
+            type='submit'
+            color='rgb(101, 143, 204)'
+          />
           <TaskList>
             <List items={listItems} />
           </TaskList>
@@ -200,7 +206,7 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  font-size: 60px;
+  font-size: 70px;
   color: rgb(161, 179, 204);
   font-family: Arial;
   margin-bottom: 5px;
@@ -211,17 +217,13 @@ const Body = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-`;
-
-const AddWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: flex-start;
+  width: 30%;
 `;
 
 const Add = styled.form`
   font-family: Arial;
+  margin-bottom: 10px;
+  width: 100%;
 `;
 
 const TaskList = styled.div`
@@ -230,18 +232,7 @@ const TaskList = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   margin-top: 10px;
-`;
-
-const Note = styled.div`
-  font-size: 20px;
-  color: rgb(161, 179, 204);
-  font-family: Arial;
-`;
-
-const SubNote = styled.div`
-  font-size: 10 px;
-  color: rgb(161, 179, 204);
-  font-family: Arial;
+  width: 100%;
 `;
 
 const TaskItem = styled.li`
@@ -249,10 +240,11 @@ const TaskItem = styled.li`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
+  width: 100%;
 `;
 
 const TaskText = styled.input`
-  width: 250px;
+  width: 100%;
 `;
 
 export default App;
