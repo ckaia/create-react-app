@@ -1,149 +1,129 @@
 // packages
 import React, {Component} from 'react';
+import styled from 'styled-components';
+import _ from 'lodash';
 
 // components
 import Button from './components/Button/Button';
 import Input from './components/Input/Input';
 import List from './components/List/List';
-import ListItem from './components/ListItem/ListItem';
 
 /**
- * A container component that is used to wrap a To-do list
- * where the user can interact by adding, removing or editing tasks.
+ * A container component that is used to wrap a todo list
+ * where the user can interact by adding, removing or editing tasks
  */
 class App extends Component {
-  /**
-   * The constructor of App component
-   * @param  {object} props props
-   */
   constructor(props) {
     super(props);
 
     this.state = {
       /**
-       * List of tasks
+       * Contains all the tasks that user adds in todo list
        */
       taskList: [],
       /**
-       * Task list item, only the text part
+       * Index of the editing task
        */
-      value: ''
+      editingTaskIndex: -1
     };
 
     // function bindings
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClickText = this.handleClickText.bind(this);
-    this.handleUpdateText = this.handleUpdateText.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleKeyPressText = this.handleKeyPressText.bind(this);
+    this.addTaskOnClick = this.addTaskOnClick.bind(this);
+    this.addTaskOnEnter = this.addTaskOnEnter.bind(this);
+    this.editTask = this.editTask.bind(this);
+    this.enableEditMode = this.enableEditMode.bind(this);
+    this.disableEditMode = this.disableEditMode.bind(this);
+    this.removeTask = this.removeTask.bind(this);
+    this.skipEditMode = this.skipEditMode.bind(this);
 
-    // Distinguish edit mode
-    this.editAction = '';
-
-    // Distinguish position of item in task list
-    this.index = null;
-  }
-
-  componentDidMount() {
-    document.getElementById('input-task').addEventListener('keypress', this.handleKeyPress);
-    document.getElementById('edit-task').addEventListener('keypress', this.handleKeyPressText);
-  }
-
-  componentWillUnmount() {
-    document.getElementById('input-task').removeEventListener('keypress', this.handleKeyPress);
-    document.getElementById('edit-task').removeEventListener('keypress', this.handleKeyPressText);
+    // variables
+    this.editingTask = '';
   }
 
   /**
-   * To add task on button click and on ENTER
+   * Adding task in todo list on event. When add button is clicked the task is added to task list.
+   * @param  {object} e click event
    */
-  addTask() {
-    const task = document.querySelector('input').value;
-    this.setState({value: task, taskList: this.state.taskList.concat(task)});
+  addTaskOnClick() {
+    const task = document.getElementById('add-task').value;
 
-    document.getElementById('input-task').reset();
+    this.addTask(task);
   }
 
   /**
-   * To edit task on task text click
-   * @param  {string} mode either textbox, input or event
-   * @param  {string} item user task to be edited
+   * Adding task in todo list on event. When "enter" event is triggered the task is added to task list.
+   * @param  {object} e keyboard event
    */
-  editTask(mode, item) {
-    this.editAction = mode;
-    if (mode !== 'event') {
-      this.setState({value: item});
-    } else {
-      const newTaskList = this.state.taskList;
-      newTaskList[this.index] = item;
-      this.setState({value: item, taskList: newTaskList});
+  addTaskOnEnter(e) {
+    if (e && e.key === 'Enter') {
+      e.preventDefault();
+      const task = e.target.value;
+
+      this.addTask(task);
     }
   }
 
   /**
-   * To remove task on button click
-   * @param  {string} item User task to be removed
+   * Update state with new task in task list. Input is reseted after task submition, so manual task deletion by user,
+   * is not necessary.
+   * @param {string} task The task to be added in the list
    */
-  removeTask(item) {
-    const newTaskList = this.state.taskList;
-    if (newTaskList.indexOf(item) > -1) {
-      newTaskList.splice(newTaskList.indexOf(item), 1);
-      this.setState({taskList: newTaskList});
-    }
+  addTask(task) {
+    this.setState(prevState => ({
+      taskList: [...prevState.taskList, task]
+    }));
+
+    document.getElementById('task-form').reset();
   }
 
   /**
-   * To handle click when button for add or removed are clicked
-   * @param  {string} item user task
+   * Editing task
+   * @param  {object} e keyboard type event
    */
-  handleClick(item) {
-    return e => {
-      const textContext = e.target.textContent;
-      if (textContext === 'Add') {
-        this.addTask(item);
-      } else if (textContext === 'Remove') {
-        this.removeTask(item);
+  editTask(e) {
+    this.editingTask = e.target.value;
+  }
+
+  /**
+   * Enable task editing
+   * @param  {object} e click event
+   */
+  enableEditMode(e) {
+    this.setState({editingTaskIndex: Number(e.target.dataset.index)});
+  }
+
+  /**
+   * Submit task
+   * @param  {object} e Event
+   */
+  disableEditMode(e) {
+    _.debounce(() => {
+      if (e.key === 'Enter') {
+        const editingTaskList = _.clone(this.state.taskList);
+        editingTaskList[this.state.editingTaskIndex] = e.target.value;
+
+        this.setState({editingTaskIndex: -1, taskList: editingTaskList});
       }
-    };
+    }, 250)();
   }
 
   /**
-   * To handle task text click
-   * @param  {string} item user task
+   * Delete selected task from task list
+   * @param  {string} index index of the task to be removed
    */
-  handleClickText(item) {
-    this.editTask('textbox', item);
+  removeTask(index) {
+    this.setState(prevState => {
+      prevState.taskList.splice(index, 1);
+      return {taskList: prevState.taskList};
+    });
   }
 
   /**
-   * To handle user tak editing
-   * @param  {string} value User task
+   * Submit task
+   * @param  {object} e Event
    */
-  handleUpdateText(value) {
-    this.editTask('input', value);
-  }
-
-  /**
-   * To handle ENTER pressing on add
-   * @param  {object} e keyboard event
-   */
-  handleKeyPress(e) {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-      this.addTask();
-    }
-  }
-
-  /**
-   * To handle ENTER pressing on edit
-   * @param  {object} e keyboard event
-   */
-  handleKeyPressText(e) {
-    if (e.keyCode === 13) {
-      e.preventDefault();
-
-      this.editTask('event', this.state.value);
-    }
+  skipEditMode() {
+    this.setState({editingTaskIndex: -1});
   }
 
   /**
@@ -151,50 +131,120 @@ class App extends Component {
    * @return {object} the displayed to-do interactive list
    */
   render() {
-    let listItem = null;
+    let taskElem;
 
-    const listItems = this.state.taskList.map(
-      (item, index) => {
-        if (this.editAction === 'input' && this.index === index) {
-          listItem = <ListItem value={this.state.value} onChangeText={this.handleUpdateText} />;
-        } else if (this.editAction === 'textbox' && this.state.value === item) {
-          this.index = index;
-          listItem = <ListItem value={this.state.value} onChangeText={this.handleUpdateText} />;
-        } else if (this.editAction === 'event' && this.index === index) {
-          listItem = <textbox onClick={() => this.handleClickText(this.state.value)}>{this.state.value}</textbox>;
-        } else {
-          listItem = <textbox onClick={() => this.handleClickText(item)}>{item}</textbox>;
-        }
-
-        return (
-          <li key={`${item}-${index}`}>
-            <Button onClick={this.handleClick} text="Remove" type="submit" width="65px" clickData={item} />
-            <span>{' '}</span>
-            <span>{listItem}</span>
-          </li>
+    const listItems = this.state.taskList.map((item, index) => {
+      if (this.state.editingTaskIndex !== index) {
+        taskElem = (
+          <TaskText
+            onClick={this.enableEditMode}
+            data-index={index}
+            value={item}
+            rows={1}
+          />
+        );
+      } else {
+        // Edit mode
+        taskElem = (
+          <TaskText
+            type='text'
+            value={item}
+            onChange={this.editTask}
+            onKeyPress={this.disableEditMode}
+            onBlur={this.skipEditMode}
+          />
         );
       }
-    );
 
-    this.editAction = '';
+      return (
+        <TaskItem key={`${item}-${index}`}>
+          {taskElem}
+          <Button
+            clickData={item}
+            color='rgb(101, 143, 204)'
+            onClick={() => this.removeTask(index)}
+            text='remove'
+            type='submit'
+          />
+        </TaskItem>
+      );
+    });
 
     return (
-      <div>
-        <br />
-        <form id="input-task">
-          <Input type="text" defaultText="Type your task in here" />
-        </form>
-        <Button onClick={this.handleClick} text="Add" type="submit" color="royalblue" />
-        <br />
-        <br />
-
-        <div id="edit-task">
-          Tasks
-          <List items={listItems} />
-        </div>
-      </div>
+      <Container>
+        <Header>todo</Header>
+        <Body>
+          <Add id='task-form'>
+            <Input
+              type='text'
+              defaultText='Type what you should do'
+              onKeyPress={this.addTaskOnEnter}
+              id='add-task'
+              width='100%'
+            />
+          </Add>
+          <Button
+            onClick={this.addTaskOnClick}
+            text='add'
+            type='submit'
+            color='rgb(101, 143, 204)'
+          />
+          <TaskList>
+            <List items={listItems} />
+          </TaskList>
+        </Body>
+      </Container>
     );
   }
 }
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
+const Header = styled.div`
+  font-size: 70px;
+  color: rgb(161, 179, 204);
+  font-family: Arial;
+  margin-bottom: 5px;
+`;
+
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 30%;
+`;
+
+const Add = styled.form`
+  font-family: Arial;
+  margin-bottom: 10px;
+  width: 100%;
+`;
+
+const TaskList = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  margin-top: 10px;
+  width: 100%;
+`;
+
+const TaskItem = styled.li`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+`;
+
+const TaskText = styled.input`
+  width: 100%;
+`;
 
 export default App;
