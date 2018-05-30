@@ -163,7 +163,7 @@ class App extends Component {
             clickData={item}
             color='rgb(101, 143, 204)'
             onClick={() => this.removeTask(index)}
-            text='remove'
+            text='x'
             type='submit'
           />
         </TaskItem>
@@ -172,12 +172,12 @@ class App extends Component {
 
     return (
       <Container>
-        <Header>todo</Header>
+        <Header>todos</Header>
         <Body>
           <Add id='task-form'>
             <Input
               type='text'
-              defaultText='Type what you should do'
+              defaultText='Type your todos...'
               onKeyPress={this.addTaskOnEnter}
               id='add-task'
               width='100%'
