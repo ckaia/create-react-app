@@ -209,11 +209,12 @@ const Body = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 30%;
+  width: 50%;
 `;
 
 const Add = styled.form`
   font-family: Arial;
+  font-size: 40px;
   margin-bottom: 10px;
   width: 100%;
 `;
@@ -236,6 +237,8 @@ const TaskItem = styled.li`
 `;
 
 const TaskText = styled.input`
+  font-size: 20px;
+  font-family: Arial;
   width: 100%;
   margin-right: 10px;
 `;
