@@ -241,6 +241,7 @@ const TaskText = styled.input`
   font-family: Arial;
   width: 100%;
   margin-right: 10px;
+  margin-bottom: 1px;
 `;
 
 export default App;
