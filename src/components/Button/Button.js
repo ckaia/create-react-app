@@ -13,21 +13,23 @@ const Button = ({
   type,
   width
 }) => (
-  <TaskRemove
+  <Content
     backgroundColor={backgroundColor}
     borderRadius={borderRadius}
     color={color}
     width={width}
     type={type}
     onClick={() => onClick(clickData)}
-  >{text}</TaskRemove>
+  >{text}</Content>
 );
 
-const TaskRemove = styled.button`
+const Content = styled.button`
   background-color: ${props => props.backgroundColor};
   border-radius: ${props => props.borderRadius}px;
   color: ${props => props.color};
   width: ${props => props.width}px;
+  font-size: 20px;
+  font-family: Arial;
 `;
 
 Button.propTypes = {

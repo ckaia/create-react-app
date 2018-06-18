@@ -18,13 +18,17 @@ class App extends Component {
 
     this.state = {
       /**
-       * Contains all the tasks that user adds in todo list
+       * Keeping task that user selects for editing
        */
-      taskList: [],
+      editingTask: '',
       /**
        * Index of the editing task
        */
-      editingTaskIndex: -1
+      editingTaskIndex: -1,
+      /**
+       * Contains all the tasks that user adds in todo list
+       */
+      taskList: []
     };
 
     // function bindings
@@ -35,9 +39,6 @@ class App extends Component {
     this.disableEditMode = this.disableEditMode.bind(this);
     this.removeTask = this.removeTask.bind(this);
     this.skipEditMode = this.skipEditMode.bind(this);
-
-    // variables
-    this.editingTask = '';
   }
 
   /**
@@ -81,7 +82,7 @@ class App extends Component {
    * @param  {object} e keyboard type event
    */
   editTask(e) {
-    this.editingTask = e.target.value;
+    this.setState({editingTask: e.target.value});
   }
 
   /**
@@ -89,7 +90,10 @@ class App extends Component {
    * @param  {object} e click event
    */
   enableEditMode(e) {
-    this.setState({editingTaskIndex: Number(e.target.dataset.index)});
+    this.setState({
+      editingTaskIndex: Number(e.target.dataset.index),
+      editingTask: e.target.value
+    });
   }
 
   /**
@@ -97,14 +101,12 @@ class App extends Component {
    * @param  {object} e Event
    */
   disableEditMode(e) {
-    _.debounce(() => {
-      if (e.key === 'Enter') {
-        const editingTaskList = _.clone(this.state.taskList);
-        editingTaskList[this.state.editingTaskIndex] = e.target.value;
+    if (e.key === 'Enter') {
+      const editingTaskList = _.clone(this.state.taskList);
+      editingTaskList[this.state.editingTaskIndex] = e.target.value;
 
-        this.setState({editingTaskIndex: -1, taskList: editingTaskList});
-      }
-    }, 250)();
+      this.setState({editingTaskIndex: -1, taskList: editingTaskList});
+    }
   }
 
   /**
@@ -131,53 +133,43 @@ class App extends Component {
    * @return {object} the displayed to-do interactive list
    */
   render() {
-    let taskElem;
-
-    const listItems = this.state.taskList.map((item, index) => {
-      if (this.state.editingTaskIndex !== index) {
-        taskElem = (
+    const listItems = this.state.taskList.map((item, index) => (
+      <TaskItem key={`${item}-${index}`}>
+        {this.state.editingTaskIndex !== index && (
           <TaskText
             onClick={this.enableEditMode}
             data-index={index}
             value={item}
             rows={1}
           />
-        );
-      } else {
-        // Edit mode
-        taskElem = (
+        ) || (
+          // Edit mode
           <TaskText
             type='text'
-            value={item}
+            value={this.state.editingTask}
             onChange={this.editTask}
             onKeyPress={this.disableEditMode}
             onBlur={this.skipEditMode}
           />
-        );
-      }
-
-      return (
-        <TaskItem key={`${item}-${index}`}>
-          {taskElem}
-          <Button
-            clickData={item}
-            color='rgb(101, 143, 204)'
-            onClick={() => this.removeTask(index)}
-            text='remove'
-            type='submit'
-          />
-        </TaskItem>
-      );
-    });
+        )}
+        <Button
+          clickData={item}
+          color='rgb(101, 143, 204)'
+          onClick={() => this.removeTask(index)}
+          text='x'
+          type='submit'
+        />
+      </TaskItem>
+    ));
 
     return (
       <Container>
-        <Header>todo</Header>
+        <Header>todos</Header>
         <Body>
           <Add id='task-form'>
             <Input
               type='text'
-              defaultText='Type what you should do'
+              defaultText='Type your todos...'
               onKeyPress={this.addTaskOnEnter}
               id='add-task'
               width='100%'
@@ -217,11 +209,12 @@ const Body = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  width: 30%;
+  width: 50%;
 `;
 
 const Add = styled.form`
   font-family: Arial;
+  font-size: 40px;
   margin-bottom: 10px;
   width: 100%;
 `;
@@ -244,7 +237,11 @@ const TaskItem = styled.li`
 `;
 
 const TaskText = styled.input`
+  font-size: 20px;
+  font-family: Arial;
   width: 100%;
+  margin-right: 10px;
+  margin-bottom: 1px;
 `;
 
 export default App;

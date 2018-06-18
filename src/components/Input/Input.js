@@ -1,14 +1,20 @@
 // packages
 import React from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
 const Input = ({onKeyPress, defaultText, width, type, id}) => {
   const styles = {width};
 
   return (
-    <input onKeyPress={onKeyPress} placeholder={defaultText} type={type} style={styles} id={id} />
+    <Content onKeyPress={onKeyPress} placeholder={defaultText} type={type} style={styles} id={id} />
   );
 };
+
+const Content = styled.input`
+  font-size: 20px;
+  font-family: Arial;
+`;
 
 Input.propTypes = {
   /**
