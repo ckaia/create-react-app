@@ -283,6 +283,9 @@ const TaskItem = styled.li`
   justify-content: flex-end;
   align-items: center;
   width: 100%;
+  border: 1px solid rgb(220, 220, 220);
+  border-radius: 5px;
+  margin: 2px 4px;
 `;
 
 const TaskText = styled.input`
