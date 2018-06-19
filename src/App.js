@@ -295,6 +295,8 @@ const TaskText = styled.input`
   margin-right: 10px;
   margin-bottom: 1px;
   ${props => (props.strikeThrough && 'text-decoration: line-through')};
+  border: none;
+  border-color: transparent;
 `;
 
 export default App;
