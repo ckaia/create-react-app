@@ -18,6 +18,10 @@ class App extends Component {
 
     this.state = {
       /**
+       * Keeping indices of all tasks that user completed
+       */
+      completingTasks: [],
+      /**
        * Keeping task that user selects for editing
        */
       editingTask: '',
@@ -111,12 +115,40 @@ class App extends Component {
 
   /**
    * Delete selected task from task list
-   * @param  {string} index index of the task to be removed
+   * @param {string} index index of the task to be removed
    */
   removeTask(index) {
     this.setState(prevState => {
       prevState.taskList.splice(index, 1);
-      return {taskList: prevState.taskList};
+
+      // remove deleted task from completed list and update indices accordingly
+      const completingTasks = prevState.completingTasks.reduce((newArray, item) => {
+        if (item > index) {
+          newArray.push(item - 1);
+        } else if (item < index) {
+          newArray.push(item);
+        }
+        return newArray;
+      }, []);
+
+      return {
+        taskList: prevState.taskList,
+        completingTasks
+      };
+    });
+  }
+
+  /**
+   * Complete selected task by adding a strikethrough
+   * @param {string} index index of the task to be completed
+   */
+  completeTask(index) {
+    this.setState(prevState => {
+      if (prevState.completingTasks.indexOf(index) < 0) {
+        return {completingTasks: [...prevState.completingTasks, index]};
+      }
+
+      return {completingTasks: prevState.completingTasks};
     });
   }
 
@@ -135,14 +167,24 @@ class App extends Component {
   render() {
     const listItems = this.state.taskList.map((item, index) => (
       <TaskItem key={`${item}-${index}`}>
-        {this.state.editingTaskIndex !== index && (
+        {(this.state.completingTasks.indexOf(index) > -1 && (
+          // Completed mode
+          <TaskText
+            strikeThrough={true}
+            data-index={index}
+            value={item}
+            rows={1}
+            disabled={true}
+          />
+        )) || (this.state.editingTaskIndex !== index && (
+          // Normal mode
           <TaskText
             onClick={this.enableEditMode}
             data-index={index}
             value={item}
             rows={1}
           />
-        ) || (
+        )) || (
           // Edit mode
           <TaskText
             type='text'
@@ -156,7 +198,14 @@ class App extends Component {
           clickData={item}
           color='rgb(101, 143, 204)'
           onClick={() => this.removeTask(index)}
-          text='x'
+          text='del'
+          type='submit'
+        />
+        <Button
+          clickData={item}
+          color='rgb(101, 143, 204)'
+          onClick={() => this.completeTask(index)}
+          text='ok'
           type='submit'
         />
       </TaskItem>
@@ -242,6 +291,7 @@ const TaskText = styled.input`
   width: 100%;
   margin-right: 10px;
   margin-bottom: 1px;
+  ${props => (props.strikeThrough && 'text-decoration: line-through')};
 `;
 
 export default App;
