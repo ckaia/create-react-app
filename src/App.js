@@ -198,14 +198,14 @@ class App extends Component {
           clickData={item}
           color='rgb(101, 143, 204)'
           onClick={() => this.removeTask(index)}
-          text='del'
+          text='x'
           type='submit'
         />
         <Button
           clickData={item}
           color='rgb(101, 143, 204)'
           onClick={() => this.completeTask(index)}
-          text='ok'
+          text='✓'
           type='submit'
         />
       </TaskItem>
