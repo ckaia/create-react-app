@@ -68,8 +68,8 @@ Button.propTypes = {
 };
 
 Button.defaultProps = {
-  backgroundColor: null,
-  borderRadius: null,
+  backgroundColor: 'rgb(255, 255, 255)',
+  borderRadius: '5',
   clickData: null,
   width: '50'
 };
