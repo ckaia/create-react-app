@@ -196,16 +196,16 @@ class App extends Component {
         )}
         <Button
           clickData={item}
-          color='rgb(101, 143, 204)'
-          onClick={() => this.removeTask(index)}
-          text='del'
+          color='rgb(161, 179, 204)'
+          onClick={() => this.completeTask(index)}
+          text='✓'
           type='submit'
         />
         <Button
           clickData={item}
-          color='rgb(101, 143, 204)'
-          onClick={() => this.completeTask(index)}
-          text='ok'
+          color='rgb(161, 179, 204)'
+          onClick={() => this.removeTask(index)}
+          text='x'
           type='submit'
         />
       </TaskItem>
@@ -228,9 +228,10 @@ class App extends Component {
             onClick={this.addTaskOnClick}
             text='add'
             type='submit'
-            color='rgb(101, 143, 204)'
+            color='rgb(161, 179, 204)'
           />
           <TaskList>
+            <Title>Your todos listed:</Title>
             <List items={listItems} />
           </TaskList>
         </Body>
@@ -257,32 +258,35 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-start;
-  width: 50%;
+  align-items: center;
+  width: 30%;
 `;
 
 const Add = styled.form`
-  font-family: Arial;
-  font-size: 40px;
   margin-bottom: 10px;
-  width: 100%;
 `;
 
 const TaskList = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-top: 10px;
+  margin-top: 20px;
   width: 100%;
+`;
+
+const Title = styled.div`
+  margin-top: 10px;
+  font-size: 20px;
+  font-family: Arial;
+  color: rgb(161, 179, 204);
 `;
 
 const TaskItem = styled.li`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
+  border: 1px solid rgb(220, 220, 220);
+  border-radius: 5px;
+  margin: 2px 4px;
 `;
 
 const TaskText = styled.input`
@@ -292,6 +296,8 @@ const TaskText = styled.input`
   margin-right: 10px;
   margin-bottom: 1px;
   ${props => (props.strikeThrough && 'text-decoration: line-through')};
+  border: none;
+  border-color: transparent;
 `;
 
 export default App;
